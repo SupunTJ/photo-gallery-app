@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.deepPurple,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Image Grid Gallery'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -31,38 +32,54 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  List<XFile> _selectedImages =
+      []; // Using XFile from image_picker instead of File
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  Future<void> pickImages() async {
+    try {
+      final List<XFile>? selectedImages = await ImagePicker()
+          .pickMultiImage(); // Using pickMultiImage for multi-selection
+      if (selectedImages != null && selectedImages.isNotEmpty) {
+        setState(() {
+          _selectedImages = selectedImages;
+        });
+      }
+    } catch (e) {
+      print("Error picking images: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to pick images: $e")),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: _selectedImages.isEmpty
+            ? const Center(child: Text('No images selected.'))
+            : GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 4.0,
+                  mainAxisSpacing: 4.0,
+                ),
+                itemCount: _selectedImages.length,
+                itemBuilder: (context, index) {
+                  return Image.file(
+                    File(_selectedImages[index].path),
+                    fit: BoxFit.cover,
+                  );
+                },
+              ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: pickImages,
+        tooltip: 'Pick Images',
         child: const Icon(Icons.add),
       ),
     );
