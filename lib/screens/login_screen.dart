@@ -9,7 +9,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome to Photo Gallery'),
+        title: const Text('Welcome to Photo Gallery App'),
         backgroundColor: const Color.fromARGB(133, 83, 137, 218),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
