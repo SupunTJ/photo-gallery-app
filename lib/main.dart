@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         home: Consumer<LoginProvider>(
           builder: (context, loginProvider, _) {
             if (loginProvider.isAuthenticated) {
-              return HomeScreen(title: 'Image Grid Gallery');
+              return const HomeScreen(title: 'Image Grid Gallery');
             } else {
               return LoginScreen();
             }

@@ -14,7 +14,7 @@ class LoginProvider with ChangeNotifier {
 
   bool get isAuthenticated => _currentUser != null;
 
-  Future<User?> signInWithGoogle() async {
+  Future<User?> signInWithGoogle(BuildContext context) async {
     try {
       _isLoading = true;
       notifyListeners();
@@ -41,6 +41,11 @@ class LoginProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
 
+      if (_currentUser != null) {
+        // Navigate to home screen only if user is authenticated
+        navigateToHomePage(context);
+      }
+
       return _currentUser;
     } catch (e) {
       _isLoading = false;
@@ -51,11 +56,24 @@ class LoginProvider with ChangeNotifier {
   }
 
   void navigateToHomePage(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomeScreen(title: 'Image Grid Gallery'),
-      ),
-    );
+    if (_currentUser != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(title: 'Image Grid Gallery'),
+        ),
+      );
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await _googleSignIn.signOut(); // Sign out from Google
+      await _auth.signOut(); // Sign out from Firebase Auth
+      _currentUser = null;
+      notifyListeners();
+    } catch (e) {
+      print("Error signing out: $e");
+    }
   }
 }

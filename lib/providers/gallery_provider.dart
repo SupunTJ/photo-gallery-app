@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
+import 'package:photo_gallery_app/screens/login_screen.dart';
 
 class GalleryProvider with ChangeNotifier {
   List<String> _imageUrls = [];
@@ -42,9 +43,9 @@ class GalleryProvider with ChangeNotifier {
     }
   }
 
-  Future<void> pickImages() async {
+  Future<void> pickImages(BuildContext context) async {
     if (!_isAuthenticated) {
-      _showLoginAlert();
+      _showLoginAlert(context);
       return;
     }
 
@@ -82,9 +83,9 @@ class GalleryProvider with ChangeNotifier {
     await FirebaseFirestore.instance.collection('images').add({'url': url});
   }
 
-  Future<void> deleteImage(String url) async {
+  Future<void> deleteImage(BuildContext context, String url) async {
     if (!_isAuthenticated) {
-      _showLoginAlert();
+      _showLoginAlert(context);
       return;
     }
 
@@ -107,14 +108,14 @@ class GalleryProvider with ChangeNotifier {
     }
   }
 
-  Future<void> deleteSelectedImages() async {
+  Future<void> deleteSelectedImages(BuildContext context) async {
     if (!_isAuthenticated) {
-      _showLoginAlert();
+      _showLoginAlert(context);
       return;
     }
 
     for (String url in _selectedUrls) {
-      await deleteImage(url);
+      await deleteImage(context, url);
     }
 
     _selectionMode = false;
@@ -122,9 +123,9 @@ class GalleryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleSelectionMode() {
+  void toggleSelectionMode(BuildContext context) {
     if (!_isAuthenticated) {
-      _showLoginAlert();
+      _showLoginAlert(context);
       return;
     }
 
@@ -142,17 +143,38 @@ class GalleryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> signOut() async {
+  Future<void> signOut(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
       _isAuthenticated = false;
       notifyListeners();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
     } catch (e) {
       print("Error signing out: $e");
     }
   }
 
-  void _showLoginAlert() {
-    // Implement your logic for showing a login alert
+  void _showLoginAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Login Required'),
+          content:
+              const Text('You need to be logged in to perform this action.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
