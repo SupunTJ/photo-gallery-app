@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_gallery_app/providers/login_provider.dart';
 import 'package:photo_gallery_app/screens/home_screen.dart';
@@ -19,19 +20,16 @@ class LoginScreen extends StatelessWidget {
                   children: <Widget>[
                     ElevatedButton(
                       onPressed: () async {
-                        // Perform sign-in action here if needed
-                        // For example:
-                        // User? user = await loginProvider.signInWithGoogle();
-                        // if (user != null) {
-                        //   loginProvider.navigateToHomePage(context);
-                        // }
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                HomeScreen(title: 'Flutter Demo Home Page'),
-                          ),
-                        );
+                        User? user = await loginProvider.signInWithGoogle();
+                        if (user != null) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  HomeScreen(title: 'Image Grid Gallery'),
+                            ),
+                          );
+                        }
                       },
                       child: const Text('Sign in with Google'),
                     ),
@@ -42,7 +40,7 @@ class LoginScreen extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                HomeScreen(title: 'Flutter Demo Home Page'),
+                                HomeScreen(title: 'Image Grid Gallery'),
                           ),
                         );
                       },
