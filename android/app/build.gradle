@@ -29,7 +29,7 @@ android {
         // Specify your unique Application ID
         applicationId "com.example.photo_gallery_app" // Replace with your package name
         // Minimum and target SDK versions
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
