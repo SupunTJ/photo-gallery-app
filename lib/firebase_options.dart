@@ -63,6 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '794543006176',
     projectId: 'photo-gallery-dcd52',
     storageBucket: 'photo-gallery-dcd52.appspot.com',
+    androidClientId: '794543006176-m124h7da44k6nmr14hd0k21gcrbnte46.apps.googleusercontent.com',
+    iosClientId: '794543006176-qgpssph4i0vdvmbj8hon3he37gtum4la.apps.googleusercontent.com',
     iosBundleId: 'com.example.photoGalleryApp',
   );
 
@@ -72,6 +74,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '794543006176',
     projectId: 'photo-gallery-dcd52',
     storageBucket: 'photo-gallery-dcd52.appspot.com',
+    androidClientId: '794543006176-m124h7da44k6nmr14hd0k21gcrbnte46.apps.googleusercontent.com',
+    iosClientId: '794543006176-qgpssph4i0vdvmbj8hon3he37gtum4la.apps.googleusercontent.com',
     iosBundleId: 'com.example.photoGalleryApp',
   );
 
@@ -83,4 +87,5 @@ class DefaultFirebaseOptions {
     authDomain: 'photo-gallery-dcd52.firebaseapp.com',
     storageBucket: 'photo-gallery-dcd52.appspot.com',
   );
+
 }
