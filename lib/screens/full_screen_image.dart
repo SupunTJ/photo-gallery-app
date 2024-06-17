@@ -10,7 +10,7 @@ class FullScreenImage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Full Screen Image'),
-        backgroundColor: const Color.fromARGB(133, 83, 137, 218),
+        backgroundColor: Color.fromARGB(133, 79, 125, 195),
       ),
       body: Stack(
         fit: StackFit.expand,
