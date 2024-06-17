@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => _goToLoginScreen(context),
         ),
         actions: [

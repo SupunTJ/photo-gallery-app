@@ -19,12 +19,11 @@ class GalleryProvider with ChangeNotifier {
   bool get isAuthenticated => _isAuthenticated;
 
   GalleryProvider() {
-    checkAuthentication(); // Changed from _checkAuthentication
+    checkAuthentication();
     _fetchImageUrls();
   }
 
   void checkAuthentication() {
-    // Changed from _checkAuthentication
     User? user = FirebaseAuth.instance.currentUser;
     _isAuthenticated = user != null;
     notifyListeners();
