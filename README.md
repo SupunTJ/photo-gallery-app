@@ -1,12 +1,13 @@
 # Photo Gallery App
 
 A Flutter application that allows users to upload and display images in a visually appealing grid gallery. This app leverages Firebase for storage, database, and authentication functionalities.
-
+<!--
 ## App Demo:
 
 ```bash
 https://youtu.be/l8hGBumfRk0
 ```
+-->
 
 ## Features
 
