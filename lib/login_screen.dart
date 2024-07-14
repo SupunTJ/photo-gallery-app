@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import 'main.dart'; // Import to navigate back to your main page
+import 'package:photo_gallery_app/home_page.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
