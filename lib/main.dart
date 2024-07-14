@@ -3,8 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 
-import 'package:photo_gallery_app/home_page.dart';
-import 'package:photo_gallery_app/login_screen.dart'; // Use an alias to avoid conflict
+import 'package:photo_gallery_app/screens/home_page.dart';
+import 'package:photo_gallery_app/screens/login_screen.dart'; // Use an alias to avoid conflict
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       ),
       home: FirebaseAuth.instance.currentUser == null
           ? LoginScreen()
-          : const MyHomePage(title: 'Image Grid Gallery'),
+          : MyHomePage(),
     );
   }
 }

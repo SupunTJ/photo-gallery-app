@@ -5,13 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
-import 'package:photo_gallery_app/full_screen_image.dart';
-import 'package:photo_gallery_app/login_screen.dart';
+import 'package:photo_gallery_app/screens/full_screen_image.dart';
+import 'package:photo_gallery_app/screens/login_screen.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -138,7 +136,6 @@ class _MyHomePageState extends State<MyHomePage> {
       _showLoginAlert();
       return;
     }
-
     setState(() {
       _selectionMode = !_selectionMode;
       _selectedUrls.clear();
@@ -186,7 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
           title: const Text('Login Required'),
           content:
               const Text('You need to be logged in to perform this action.'),
-          actions: <Widget>[
+          actions: [
             TextButton(
               child: const Text('OK'),
               onPressed: () {
@@ -220,8 +217,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blueGrey,
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Image Grid Gallery'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: _goToLoginScreen,
@@ -248,24 +246,19 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: _imageUrls.isEmpty
-            ? Center(
+            ? const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('No images selected.'),
-                    if (!_isAuthenticated)
-                      ElevatedButton(
-                        onPressed: _goToLoginScreen,
-                        child: const Text('Login'),
-                      ),
+                    CircularProgressIndicator(),
                   ],
                 ),
               )
             : GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  crossAxisSpacing: 4.0,
-                  mainAxisSpacing: 4.0,
+                  crossAxisSpacing: 5.0,
+                  mainAxisSpacing: 5.0,
                 ),
                 itemCount: _imageUrls.length,
                 itemBuilder: (context, index) {
