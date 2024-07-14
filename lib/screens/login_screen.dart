@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import 'main.dart'; // Import to navigate back to your main page
+import 'package:photo_gallery_app/screens/home_page.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -17,7 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
-        return null; // User canceled the sign-in
+        return null;
       }
 
       final GoogleSignInAuthentication googleAuth =
@@ -47,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: [
             ElevatedButton(
               onPressed: () async {
                 User? user = await _signInWithGoogle();
@@ -55,9 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MyHomePage(
-                        title: 'Image Grid Gallery',
-                      ),
+                      builder: (context) => const MyHomePage(),
                     ),
                   );
                 }
@@ -70,9 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(
-                      title: 'Image Grid Gallery',
-                    ),
+                    builder: (context) => const MyHomePage(),
                   ),
                 );
               },
