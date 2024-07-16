@@ -13,16 +13,13 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter App',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
       home: FirebaseAuth.instance.currentUser == null
           ? LoginScreen()
           : MyHomePage(),

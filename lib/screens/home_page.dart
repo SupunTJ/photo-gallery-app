@@ -9,7 +9,7 @@ import 'package:photo_gallery_app/screens/full_screen_image.dart';
 import 'package:photo_gallery_app/screens/login_screen.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -97,15 +97,20 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     try {
+      print("Attempting to delete image: $url");
       await FirebaseStorage.instance.refFromURL(url).delete();
+      print("Deleted image from Firebase Storage: $url");
 
       QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('images')
-          .where('url', isEqualTo: url)
+          .collection("images")
+          .where("url", isEqualTo: url)
           .get();
+
+      print("QuerySnapshot for URL: $url, docs: ${snapshot.docs}");
 
       for (var doc in snapshot.docs) {
         await doc.reference.delete();
+        print("Deleted document with ID: ${doc.id}");
       }
 
       setState(() {
@@ -122,9 +127,12 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    for (String url in _selectedUrls) {
+    List<String> urlsToDelete = List.from(_selectedUrls);
+
+    for (String url in urlsToDelete) {
       await _deleteImage(url);
     }
+
     setState(() {
       _selectionMode = false;
       _selectedUrls.clear();
@@ -217,17 +225,28 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
       appBar: AppBar(
-        title: Text('Image Grid Gallery'),
+        centerTitle: true,
+        foregroundColor: Colors.black,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                Colors.cyan,
+                Colors.white,
+              ])),
+        ),
+        title: const Text('Image Grid Gallery'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: _goToLoginScreen,
         ),
         actions: [
           if (_isAuthenticated)
             IconButton(
-              icon: Icon(Icons.exit_to_app),
+              icon: const Icon(Icons.exit_to_app),
               onPressed: _signOut,
             ),
           if (_selectionMode)
@@ -243,54 +262,68 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: _imageUrls.isEmpty
-            ? const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
-                ),
-              )
-            : GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 5.0,
-                  mainAxisSpacing: 5.0,
-                ),
-                itemCount: _imageUrls.length,
-                itemBuilder: (context, index) {
-                  String imageUrl = _imageUrls[index];
-                  bool isSelected = _selectedUrls.contains(imageUrl);
-                  return GestureDetector(
-                    onTap: () => _onThumbnailTap(imageUrl),
-                    onLongPress: () => _onThumbnailLongPress(imageUrl),
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: Image.network(
-                            imageUrl,
-                            fit: BoxFit.cover,
-                            color: isSelected ? Colors.black45 : null,
-                            colorBlendMode:
-                                isSelected ? BlendMode.darken : null,
-                          ),
-                        ),
-                        if (_selectionMode && isSelected)
-                          const Center(
-                            child: Icon(
-                              Icons.check_circle,
-                              color: Colors.white,
-                              size: 50,
+      body: Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+              Colors.white,
+              Colors.blue,
+              Colors.white,
+            ])),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _imageUrls.isEmpty
+              ? const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                    ],
+                  ),
+                )
+              : GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 5.0,
+                    mainAxisSpacing: 5.0,
+                  ),
+                  itemCount: _imageUrls.length,
+                  itemBuilder: (context, index) {
+                    String imageUrl = _imageUrls[index];
+                    bool isSelected = _selectedUrls.contains(imageUrl);
+                    return GestureDetector(
+                      onTap: () => _onThumbnailTap(imageUrl),
+                      onLongPress: () => _onThumbnailLongPress(imageUrl),
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.network(
+                                imageUrl,
+                                fit: BoxFit.cover,
+                                color: isSelected ? Colors.black45 : null,
+                                colorBlendMode:
+                                    isSelected ? BlendMode.darken : null,
+                              ),
                             ),
                           ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                          if (_selectionMode && isSelected)
+                            const Center(
+                              child: Icon(
+                                Icons.check_circle,
+                                color: Colors.white,
+                                size: 50,
+                              ),
+                            ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+        ),
       ),
       floatingActionButton: _isAuthenticated
           ? FloatingActionButton(
